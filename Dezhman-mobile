@@ -4,86 +4,93 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>دژمان</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#030409">
+<link rel="apple-touch-icon" href="icon-512.png">
 <style>
-:root{--accent:#ffb347}
+:root{--accent:#ff6b57}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
-html,body{width:100%;height:100%;background:#05070f;font-family:Tahoma,'Segoe UI',sans-serif;color:#e8ecff;overflow:hidden;touch-action:none}
+html,body{width:100%;height:100%;background:#030409;font-family:Tahoma,'Segoe UI',sans-serif;color:#e8ecff;overflow:hidden;touch-action:none}
 #wrap{display:flex;flex-direction:column;height:100%;max-width:520px;margin:0 auto}
 #errbar{display:none;position:fixed;top:0;left:0;right:0;background:#c0392b;color:#fff;font-size:11px;padding:6px 10px;z-index:99;direction:ltr;text-align:left;max-height:80px;overflow:auto}
-#hud{display:flex;align-items:center;gap:5px;padding:calc(6px + env(safe-area-inset-top)) 8px 6px;background:linear-gradient(180deg,rgba(20,28,64,.95),rgba(12,17,40,.9));border-bottom:1px solid rgba(127,156,255,.25);flex-wrap:wrap;row-gap:4px}
-.cap{display:flex;align-items:center;gap:5px;background:rgba(127,156,255,.12);border:1px solid rgba(127,156,255,.3);border-radius:20px;padding:3px 10px;font-size:13px;font-weight:bold;white-space:nowrap}
+#hud{display:flex;align-items:center;gap:5px;padding:calc(6px + env(safe-area-inset-top)) 8px 6px;background:linear-gradient(180deg,rgba(8,11,24,.97),rgba(4,6,14,.93));border-bottom:1px solid rgba(127,156,255,.16);flex-wrap:wrap;row-gap:4px}
+.cap{display:flex;align-items:center;gap:5px;background:rgba(127,156,255,.08);border:1px solid rgba(127,156,255,.22);border-radius:20px;padding:3px 10px;font-size:13px;font-weight:bold;white-space:nowrap}
 .sLife{color:#ff6b6b}.sCoin{color:#ffd700}.sWave{color:#6bc9ff}.sDia{color:#7ff3ff}
 #hSpacer{flex:1;min-width:8px}
-.hbtn{width:38px;height:38px;border-radius:50%;border:1px solid rgba(127,156,255,.4);background:rgba(127,156,255,.14);color:#e8ecff;font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
-.hbtn:active{background:rgba(127,156,255,.35)}
+.hbtn{width:38px;height:38px;border-radius:50%;border:1px solid rgba(127,156,255,.3);background:rgba(127,156,255,.1);color:#e8ecff;font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.hbtn:active{background:rgba(127,156,255,.3)}
 #bBolt{color:#ffe76b;font-size:15px}
 #bBolt.pending{background:rgba(255,231,107,.35);border-color:#ffe76b;animation:boltPulse 1s infinite}
 @keyframes boltPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,231,107,.55)}50%{box-shadow:0 0 0 7px rgba(255,231,107,0)}}
-#bWave{background:linear-gradient(135deg,#ff9d2e,#ff5e3a);border:1px solid #ffb347;color:#fff;font-size:12px;font-weight:bold;width:auto;padding:0 14px;height:34px;border-radius:20px;animation:wavePulse 1.6s infinite;cursor:pointer;font-family:inherit;display:none;flex-shrink:0}
-@keyframes wavePulse{0%,100%{box-shadow:0 0 0 0 rgba(255,120,50,.55)}50%{box-shadow:0 0 0 9px rgba(255,120,50,0)}}
-#bTitle{font-size:15px;font-weight:bold;background:linear-gradient(90deg,#ffd700,#ff9d2e,#ffd700);-webkit-background-clip:text;background-clip:text;color:transparent;margin-left:4px;white-space:nowrap}
+#bWave{background:linear-gradient(135deg,#ff5e4d,#c22b1e);border:1px solid #ff6b57;color:#fff;font-size:12px;font-weight:bold;width:auto;padding:0 14px;height:34px;border-radius:20px;animation:wavePulse 1.6s infinite;cursor:pointer;font-family:inherit;display:none;flex-shrink:0}
+@keyframes wavePulse{0%,100%{box-shadow:0 0 0 0 rgba(255,80,50,.55)}50%{box-shadow:0 0 0 9px rgba(255,80,50,0)}}
+#bTitle{font-size:15px;font-weight:bold;background:linear-gradient(90deg,#ff5e4d,#ffb347,#ff5e4d);-webkit-background-clip:text;background-clip:text;color:transparent;margin-left:4px;white-space:nowrap}
 @media (max-width:420px){
  #hud{gap:4px}
  .cap{padding:3px 7px;font-size:12px}
  .hbtn{width:33px;height:33px;font-size:14px}
  #bTitle{font-size:13px}
 }
-#stage{position:relative;flex:1;display:flex;align-items:center;justify-content:center;background:#05070f;overflow:hidden}
+#stage{position:relative;flex:1;display:flex;align-items:center;justify-content:center;background:#030409;overflow:hidden}
 canvas#cv{max-width:100%;max-height:100%;touch-action:none}
-#preview{position:absolute;top:6px;right:6px;left:6px;display:none;align-items:center;gap:4px;background:rgba(10,14,35,.82);border:1px solid rgba(127,156,255,.3);border-radius:12px;padding:4px 8px;font-size:11px;flex-wrap:wrap;pointer-events:none}
-.pv-t{color:#6bc9ff;font-weight:bold}.pv-i{display:flex;align-items:center;gap:1px;background:rgba(127,156,255,.12);border-radius:8px;padding:1px 5px}
+#preview{position:absolute;top:6px;right:6px;left:6px;display:none;align-items:center;gap:4px;background:rgba(4,6,16,.85);border:1px solid rgba(127,156,255,.25);border-radius:12px;padding:4px 8px;font-size:11px;flex-wrap:wrap;pointer-events:none}
+.pv-t{color:#6bc9ff;font-weight:bold}.pv-i{display:flex;align-items:center;gap:1px;background:rgba(127,156,255,.1);border-radius:8px;padding:1px 5px}
 #preview img{width:22px;height:22px}.pv-n{color:#ffd700;font-weight:bold}.pv-b{color:#8892b0;font-size:10px;margin-right:auto}
-#shop{display:flex;gap:5px;padding:6px;background:linear-gradient(0deg,rgba(20,28,64,.95),rgba(12,17,40,.9));border-top:1px solid rgba(127,156,255,.25);overflow-x:auto;touch-action:pan-x}
-.card{min-width:62px;display:flex;flex-direction:column;align-items:center;gap:1px;background:rgba(127,156,255,.1);border:1.5px solid rgba(127,156,255,.3);border-radius:10px;padding:4px 3px;cursor:pointer;flex-shrink:0}
-.card.sel{border-color:var(--accent);background:rgba(255,179,71,.18);box-shadow:0 0 12px rgba(255,179,71,.4)}
+#shop{display:flex;gap:5px;padding:6px;background:linear-gradient(0deg,rgba(8,11,24,.97),rgba(4,6,14,.93));border-top:1px solid rgba(127,156,255,.16);overflow-x:auto;touch-action:pan-x}
+.card{min-width:62px;display:flex;flex-direction:column;align-items:center;gap:1px;background:rgba(127,156,255,.08);border:1.5px solid rgba(127,156,255,.25);border-radius:10px;padding:4px 3px;cursor:pointer;flex-shrink:0}
+.card.sel{border-color:var(--accent);background:rgba(255,107,87,.18);box-shadow:0 0 12px rgba(255,107,87,.4)}
 .card.poor{opacity:.45}
+.card.heroCard{border-color:rgba(255,231,107,.55);background:rgba(255,231,107,.08)}
+.card.heroCard.sel{border-color:#ffe76b;background:rgba(255,231,107,.22);box-shadow:0 0 14px rgba(255,231,107,.5)}
 .card canvas{width:38px;height:38px;pointer-events:none}
 .card .cn{font-size:10px;font-weight:bold}.card .cc{font-size:10px;color:#ffd700;font-weight:bold}
-#cardDesc{position:absolute;bottom:6px;right:6px;left:6px;background:rgba(10,14,35,.9);border:1px solid rgba(255,179,71,.45);border-radius:10px;padding:6px 9px;font-size:11px;line-height:1.6;display:none;pointer-events:none;z-index:5}
+#cardDesc{position:absolute;bottom:6px;right:6px;left:6px;background:rgba(4,6,16,.92);border:1px solid rgba(255,107,87,.45);border-radius:10px;padding:6px 9px;font-size:11px;line-height:1.6;display:none;pointer-events:none;z-index:5}
 #cardDesc b{color:var(--accent)}
-#tpanel{position:absolute;display:none;background:rgba(12,17,40,.95);border:1px solid rgba(255,179,71,.5);border-radius:12px;padding:8px;z-index:10;width:200px}
+#tpanel{position:absolute;display:none;background:rgba(6,9,22,.96);border:1px solid rgba(255,107,87,.5);border-radius:12px;padding:8px;z-index:10;width:200px}
 .tp-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
 #tpName{font-size:13px;font-weight:bold;color:var(--accent)}
 #tpClose{background:none;border:none;color:#8892b0;font-size:14px;cursor:pointer}
 .tp-lbl{font-size:10px;color:#6bc9ff;margin-bottom:3px}
 #tpTgts{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-bottom:7px}
-.tgb{font-size:9.5px;padding:5px 2px;background:rgba(127,156,255,.12);border:1px solid rgba(127,156,255,.3);border-radius:7px;color:#c8d2f5;cursor:pointer;font-family:inherit}
-.tgb.on{background:rgba(255,179,71,.28);border-color:var(--accent);color:#ffd700;font-weight:bold}
+.tgb{font-size:9.5px;padding:5px 2px;background:rgba(127,156,255,.1);border:1px solid rgba(127,156,255,.25);border-radius:7px;color:#c8d2f5;cursor:pointer;font-family:inherit}
+.tgb.on{background:rgba(255,107,87,.28);border-color:var(--accent);color:#ffd700;font-weight:bold}
 .tp-btns{display:flex;gap:5px}
 .tp-btns button{flex:1;font-size:11px;font-weight:bold;padding:7px 2px;border-radius:8px;border:none;cursor:pointer;font-family:inherit}
 #tpUp{background:linear-gradient(135deg,#2ecc71,#27ae60);color:#fff}
-#tpUp:disabled{background:#3a4468;color:#8892b0}
+#tpUp:disabled{background:#2a3352;color:#8892b0}
 #tpSell{background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff}
-.overlay{position:fixed;inset:0;background:rgba(5,7,15,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:50;padding:20px;overflow-y:auto}
-.m-title{font-size:52px;font-weight:bold;background:linear-gradient(90deg,#ffd700,#ff9d2e,#ffd700);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:4px}
-.m-sub{color:#8892b0;font-size:13px;margin-bottom:22px}
-.mbtn{width:230px;padding:13px;margin:5px;font-size:17px;font-weight:bold;background:rgba(127,156,255,.12);border:1.5px solid rgba(127,156,255,.4);border-radius:14px;color:#e8ecff;cursor:pointer;font-family:inherit}
+#tpSell:disabled{background:#2a3352;color:#8892b0}
+.overlay{position:fixed;inset:0;background:rgba(2,3,8,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:50;padding:20px;overflow-y:auto}
+.m-title{font-size:52px;font-weight:bold;background:linear-gradient(90deg,#ff5e4d,#ffb347,#ff5e4d);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:4px}
+.m-sub{color:#7a86a8;font-size:13px;margin-bottom:22px}
+.mbtn{width:230px;padding:13px;margin:5px;font-size:17px;font-weight:bold;background:rgba(127,156,255,.08);border:1.5px solid rgba(127,156,255,.3);border-radius:14px;color:#e8ecff;cursor:pointer;font-family:inherit}
 .mbtn small{display:block;font-size:10.5px;color:#8be9a0;font-weight:normal;margin-top:3px}
-#mHelp{width:230px;margin-top:14px;padding:10px;font-size:13px;background:none;border:1px solid rgba(127,156,255,.35);border-radius:12px;color:#6bc9ff;cursor:pointer;font-family:inherit}
+#mHelp{width:230px;margin-top:14px;padding:10px;font-size:13px;background:none;border:1px solid rgba(127,156,255,.3);border-radius:12px;color:#6bc9ff;cursor:pointer;font-family:inherit}
 #help,#dpanel{display:none}
-.h-box{max-width:440px;width:100%;background:rgba(15,21,50,.95);border:1px solid rgba(127,156,255,.35);border-radius:16px;padding:16px;max-height:82vh;overflow-y:auto}
+.h-box{max-width:440px;width:100%;background:rgba(8,11,26,.97);border:1px solid rgba(127,156,255,.28);border-radius:16px;padding:16px;max-height:82vh;overflow-y:auto}
 .h-box h2{color:var(--accent);font-size:18px;text-align:center;margin-bottom:10px}
-.h-box h3{color:#6bc9ff;font-size:14px;margin:12px 0 6px;border-bottom:1px solid rgba(127,156,255,.2);padding-bottom:4px}
+.h-box h3{color:#6bc9ff;font-size:14px;margin:12px 0 6px;border-bottom:1px solid rgba(127,156,255,.16);padding-bottom:4px}
 .h-item{display:flex;align-items:center;gap:9px;margin-bottom:7px;font-size:11.5px;line-height:1.55}
-.h-item canvas,.h-item img{width:40px;height:40px;flex-shrink:0;background:rgba(127,156,255,.08);border-radius:8px}
+.h-item canvas,.h-item img{width:40px;height:40px;flex-shrink:0;background:rgba(127,156,255,.06);border-radius:8px}
 .h-item b{color:var(--accent)}.h-item .st{color:#8be9a0;font-size:10px}
-.h-tip{background:rgba(255,179,71,.12);border:1px solid rgba(255,179,71,.4);border-radius:10px;padding:8px 10px;font-size:11.5px;line-height:1.7;margin-top:10px}
-.h-tip.dia{background:rgba(127,243,255,.08);border-color:rgba(127,243,255,.4)}
-#hClose,#dClose{display:block;margin:14px auto 0;padding:9px 34px;font-size:14px;font-weight:bold;background:var(--accent);border:none;border-radius:10px;color:#1a1200;cursor:pointer;font-family:inherit}
-.bu-row{display:flex;align-items:center;gap:8px;background:rgba(127,156,255,.08);border:1px solid rgba(127,156,255,.25);border-radius:12px;padding:9px;margin-bottom:7px}
+.h-tip{background:rgba(255,107,87,.1);border:1px solid rgba(255,107,87,.38);border-radius:10px;padding:8px 10px;font-size:11.5px;line-height:1.7;margin-top:10px}
+.h-tip.dia{background:rgba(127,243,255,.06);border-color:rgba(127,243,255,.35)}
+.h-tip.hero{background:rgba(255,231,107,.08);border-color:rgba(255,231,107,.45)}
+#hClose,#dClose{display:block;margin:14px auto 0;padding:9px 34px;font-size:14px;font-weight:bold;background:var(--accent);border:none;border-radius:10px;color:#1a0800;cursor:pointer;font-family:inherit}
+.bu-row{display:flex;align-items:center;gap:8px;background:rgba(127,156,255,.06);border:1px solid rgba(127,156,255,.2);border-radius:12px;padding:9px;margin-bottom:7px}
 .bu-ic{font-size:22px;flex-shrink:0}
 .bu-mid{flex:1;min-width:0}
 .bu-nm{font-size:12.5px;font-weight:bold;color:#e8ecff}
 .bu-ds{font-size:10.5px;color:#8892b0;margin-top:2px}
 .bu-pips{font-size:10px;color:#7ff3ff;margin-top:3px;letter-spacing:2px}
 .bu-buy{flex-shrink:0;font-size:11.5px;font-weight:bold;padding:8px 10px;border-radius:9px;border:none;cursor:pointer;font-family:inherit;background:linear-gradient(135deg,#26c6da,#008ba3);color:#fff;min-width:62px}
-.bu-buy:disabled{background:#3a4468;color:#8892b0}
+.bu-buy:disabled{background:#2a3352;color:#8892b0}
 #over{display:none}
 .o-title{font-size:36px;font-weight:bold;margin-bottom:8px}
 .o-win{color:#8be9a0}.o-lose{color:#ff6b6b}
 .o-info{color:#c8d2f5;font-size:14px;margin-bottom:6px;text-align:center;line-height:1.8}
 .o-new{color:#ffd700;font-size:13px;font-weight:bold;margin-bottom:10px}
-#toast{position:fixed;bottom:110px;left:50%;transform:translateX(-50%);background:rgba(231,76,60,.92);color:#fff;font-size:12px;padding:7px 16px;border-radius:20px;display:none;z-index:60;pointer-events:none}
+#toast{position:fixed;bottom:110px;left:50%;transform:translateX(-50%);background:rgba(200,40,30,.94);color:#fff;font-size:12px;padding:7px 16px;border-radius:20px;display:none;z-index:60;pointer-events:none}
 </style>
 </head>
 <body>
@@ -120,7 +127,122 @@ canvas#cv{max-width:100%;max-height:100%;touch-action:none}
 
 <div class="overlay" id="menu">
   <div class="m-title">دژمان</div>
-  <div class="m-sub">از قلعه دفاع کن — با ۱۱ برج، ۸ دشمن و آپگرید دژ</div>
+  <div class="m-sub">از قلعه دفاع کن — با ماکان، ۱۱ برج، ۱۱ دشمن و آپگرید دژ</div>
+  <button class="mbtn" id="mEasy">آسان<small id="recEasy"></small></button>
+  <button class="mbtn" id="mNormal">معمولی<small id="recNormal"></small></button>
+  <button class="mbtn" id="mHard">سخت<small id="recHard"></small></button>
+  <button class="mbtn" id="mEndless">بی‌نهایت<small id="recEndless"></small></button>
+  <button id="mHelp">📖 راهنمای کامل</button>
+</div>
+
+<div class="overlay" id="help">
+  <div class="h-box">
+    <h2>📖 راهنمای دژمان</h2>
+    <div class="h-tip">🎯 <b>حالت حمله:</b> روی هر برجِ ساخته‌شده بزن و انتخاب کن به چه کسی شلیک کند: اول مسیر، آخر مسیر، نزدیک‌ترین، دورترین، قوی‌ترین یا ضعیف‌ترین دشمن.</div>
+    <h3>🏹 برج‌ها</h3><div id="hTowers"></div>
+    <h3>👹 دشمن‌ها</h3><div id="hEnemies"></div>
+    <div class="h-tip">💰 اگر قبل از پایان شمارش معکوس موج بعدی را صدا بزنی، به‌ازای هر ثانیه‌ی باقی‌مانده سکه‌ی جایزه می‌گیری.</div>
+    <button id="hClose">فهمیدم!</button>
+  </div>
+</div>
+
+<div class="overlay" id="dpanel">
+  <div class="h-box">
+    <h2>🏛 آپگرید دژ</h2>
+    <div class="h-tip dia" id="diaInfo"></div>
+    <div id="baseList"></div>
+    <button id="dClose">بستن</button>
+  </div>
+</div>
+
+<div class="overlay" id="over">
+  <div class="o-title" id="oTitle"></div>
+  <div class="o-info" id="oInfo"></div>
+  <div class="o-new" id="oNew" style="display:none">🏆 رکورد جدید!</div>
+  <button class="mbtn" id="oRetry">🔄 بازی دوباره</button>
+  <button class="mbtn" id="oMenu">🏠 منوی اصلی</button>
+</div>
+<div id="toast"></div>
+
+<script>
+'use strict';
+window.onerror=function(msg,src,line){var el=document.getElementById('errbar');el.style.display='block';el.textContent='خطا: '+msg+' (خط '+line+')';};
+const COLS=12,ROWS=18,CELL=40,W=480,H=720;
+const THEME={bg1:'#04050d',bg2:'#0c1022',pathEdge:'#3d4778',path2:'#2c335c',path1:'#1d2244',grid:'rgba(127,156,255,.045)'};
+const WPS=[[6,0],[6,3],[2,3],[2,7],[9,7],[9,11],[4,11],[4,15],[6,15],[6,17]].map(p=>[p[0]*CELL+CELL/2,p[1]*CELL+CELL/2]);
+const MAXOFF=13,MARGIN=18;
+const BOLT={cost:60,cd:30,dmg:140,radius:70};
+const DIFF={
+ easy:{hp:1.00,lives:20,coins:240,waves:20,label:'آسان'},
+ normal:{hp:1.12,lives:15,coins:220,waves:25,label:'معمولی'},
+ hard:{hp:1.24,lives:12,coins:200,waves:30,label:'سخت'},
+ endless:{hp:1.12,lives:15,coins:220,waves:Infinity,label:'بی‌نهایت'}
+};
+const ET={
+ norm:{name:'سرباز',hp:60,spd:46,gold:4,dmg:1,r:11,col:'#ff6b6b',desc:'دشمن معمولی؛ به گروه که می‌رسد مسیر را پر می‌کند.'},
+ fast:{name:'سوارکار',hp:42,spd:88,gold:4,dmg:1,r:10,col:'#ffd93d',desc:'سریع ولی نازک! یخی و تسلا بهترین جواب‌اند.'},
+ tank:{name:'زره‌پوش',hp:190,spd:30,gold:8,dmg:2,r:14,col:'#8d99ae',desc:'خزه‌ی متحرک! دو تا جان قلعه می‌برد؛ توپخانه باید لهش کند.'},
+ fly:{name:'پهپاد',hp:75,spd:70,gold:6,dmg:1,r:12,col:'#7fd0ff',fly:true,desc:'پرواز می‌کند و از روی مسیر می‌رود! فقط کماندار، تسلا، تک‌تیرانداز، جادوگر و پدافند به او می‌رسند.'},
+ shield:{name:'سپردار',hp:130,spd:38,gold:10,dmg:2,r:13,col:'#5fa8d3',desc:'سپر انرژی دورش است؛ اول سپر را می‌شکند، بعد جانش. سپر خودش دوباره شارژ می‌شود — پشت‌سرهم بزن!'},
+ heal:{name:'نظام‌دار',hp:110,spd:40,gold:12,dmg:1,r:12,col:'#8be9a0',desc:'مدیک دشمن! به همه‌ی دشمنان اطرافش مدام جان می‌دهد. همیشه اول او را بکش!'},
+ bomber:{name:'پهپاد بمب‌انداز',hp:105,spd:58,gold:9,dmg:2,r:13,col:'#ffb347',fly:true,desc:'پهپاد سنگین بمب‌دار! هوایی است، ۲ جان قلعه می‌برد و سخت‌تر از پهپاد ساده سرنگون می‌شود. پدافند و ماکان، بهترین جواب‌اند.'},
+ berserk:{name:'دیوانه‌وار',hp:120,spd:40,gold:9,dmg:2,r:12,col:'#ff6b4a',desc:'از آتش خشمگین است! هرچه بیشتر مجروحش کنی، تندتر می‌دود (تا ۲.۳ برابر!). قبل از اینکه خشم بگیرد نابودش کن — یخی و سم‌پاش بهترین دوستان تو هستند.'},
+ titan:{name:'تایتان',hp:320,spd:26,gold:18,dmg:3,r:15,col:'#e07a5f',desc:'غولی که خودش را ترمیم می‌کند و ۳ تا جان قلعه می‌برد. آتش سنگین و پیوسته می‌خواهد.'},
+ colossus:{name:'فولادین',hp:260,spd:28,gold:15,dmg:3,r:16,col:'#95a5b5',desc:'ستون فولادی ارتش مهاجم! زره‌ی سنگین + سپر انرژی که خودش شارژ می‌شود. ۳ جان می‌برد؛ تک‌تیرانداز و ماکان باید لهش کنند.'},
+ boss:{name:'سردار',hp:700,spd:24,gold:30,dmg:5,r:18,col:'#c77dff',desc:'کابوسِ هر پنج موج! پنج جان می‌برد و ۲ الماس می‌دهد؛ همه‌ی آتش رویش!'}
+};
+const TW={
+ hero:{name:'ماکان',cost:0,dmg:60,rng:220,rate:2.0,tgt:'strong',air:true,desc:'نگهبان زادگاه — یگانه و بی‌همتا.'},
+ archer:{name:'کماندار',cost:60,dmg:14,rng:120,rate:1.4,tgt:'first',air:true,desc:'ارزان و مطمئن؛ ستون فقرات دفاع اوایل بازی. پهپاد را هم می‌زند.'},
+ flame:{name:'شعله‌افکن',cost:80,dmg:6,rng:82,rate:3.2,tgt:'first',desc:'برد کوتاه اما رگبار سنگین؛ ضد دسته‌های جمعی. به پهپاد نمی‌رسد.'},
+ frost:{name:'یخی',cost:90,dmg:8,rng:105,rate:0.9,slow:0.55,slowT:1.6,tgt:'first',desc:'دشمنان را تا ۵۵٪ کند می‌کند؛ ضعیف ولی حیاتی. به پهپاد نمی‌رسد.'},
+ poison:{name:'سم‌پاش',cost:95,dmg:5,rng:110,rate:1.1,pslow:0.35,tgt:'first',desc:'زهر می‌نشیند و ادامه‌ی مسیر را آهسته می‌کند. به پهپاد نمی‌رسد.'},
+ cannon:{name:'توپخانه',cost:110,dmg:30,rng:135,rate:0.55,splash:42,tgt:'strong',desc:'انفجار گروهی؛ روی «قوی‌ترین» بگذار. به پهپاد نمی‌رسد.'},
+ tesla:{name:'تسلا',cost:120,dmg:16,rng:100,rate:1.6,splash:20,tgt:'near',air:true,desc:'برق زنجیره‌ای به چند دشمن می‌پرد؛ ضد سوارکار و پهپاد.'},
+ sniper:{name:'تک‌تیرانداز',cost:130,dmg:62,rng:210,rate:0.45,tgt:'strong',air:true,desc:'برد سراسری و گلوله سنگین؛ باس‌کش. پهپاد را هم می‌زند.'},
+ aa:{name:'پدافند',cost:100,dmg:20,rng:140,rate:2.4,tgt:'near',airOnly:true,desc:'ضد هوایی تخصصی؛ فقط و فقط پهپادها را با رگبار سریع سرنگون می‌کند.'},
+ mortar:{name:'خمپاره',cost:165,dmg:48,rng:180,rate:0.4,splash:60,tgt:'strong',desc:'خمپاره‌ی سنگین با انفجار ویرانگر و برد بلند؛ کُند اما کوبنده. به پهپاد نمی‌رسد.'},
+ buf:{name:'ستاد فرماندهی',cost:140,dmg:0,rng:100,rate:0,tgt:'first',buf:true,desc:'شلیک نمی‌کند، اما به همه‌ی برج‌های اطرافش تا برد ۱۰۰ پیکسل، ۱۵٪ آسیب اضافه می‌دهد.'},
+ mage:{name:'جادوگر',cost:150,dmg:26,rng:125,rate:0.9,tgt:'first',air:true,desc:'گوی جادویی؛ قدرت خالص. پهپاد را هم می‌زند.'}
+};
+const HERO={name:'ماکان',cost:3,rng:220,rate:2.0,dmg:60,aura:140,slow:.70,desc:'🕊 نگهبان زادگاه! گلوله‌ی طلاییِ نفوذی، بدون خطا، ضد پهپاد + هاله‌ی نور که دشمنان اطرافش را تا ۷۰٪ کند می‌کند. یک بار در هر بازی — ۳ الماس.'};
+const TGT=[{id:'first',n:'اول مسیر'},{id:'last',n:'آخر مسیر'},{id:'near',n:'نزدیک‌ترین'},{id:'far',n:'دورترین'},{id:'strong',n:'قوی‌ترین'},{id:'weak',n:'ضعیف‌ترین'}];
+const BASEUP=[
+ {id:'armor',icon:'🏰',name:'زره‌کاری دژ',desc:'۲+ جان قلعه در شروع بازی',max:5,cost:l=>3+l*3},
+ {id:'vault',icon:'🪙',name:'خزانه‌داری',desc:'۱۰+٪ سکه از کشتن هر دشمن',max:5,cost:l=>3+l*3},
+ {id:'aim',icon:'🎯',name:'نشانه‌گیری دقیق',desc:'۳-٪ احتمال خطای برج‌ها',max:5,cost:l=>3+l*3},
+ {id:'factory',icon:'🏭',name:'کارخانه‌ی برج',desc:'۵-٪ هزینه‌ی ساخت و ارتقای برج‌ها',max:4,cost:l=>4+l*4},
+ {id:'cmd',icon:'📡',name:'فرماندهی میدانی',desc:'۶+٪ برد همه‌ی برج‌ها',max:4,cost:l=>4+l*4},
+ {id:'storm',icon:'⚡',name:'توفان صاعقه',desc:'۳۰+٪ آسیب صاعقه و شارژ سریع‌تر',max:3,cost:l=>6+l*5}
+];
+const cv=document.getElementById('cv'),g=cv.getContext('2d');
+let mode='normal',state='menu',towers=[],enemies=[],projs=[],booms=[],tracers=[],floats=[],strikes=[],spawnQ=[],wave=0,lives=20,coins=250,diam=0,gameSpeed=1,paused=false;
+let muted=localStorage.getItem('dezhman_m_mute')==='1';
+let waveActive=false,spawnT=0,restT=15,selCard=null,ghost=null,selT=null,gt=0,killsTotal=0,lastPrev=-1,dragging=false;
+let shakeT=0,pendingBolt=false,boltCd=0,boltPos=null,lastBolt=-1;
+let baseUp={};
+let heroTower=null,pendHero=false,heroGhost=null;
+const pathCells=new Set();
+(function(){for(let i=0;i<WPS.length-1;i++){const a=[Math.round((WPS[i][0]-20)/CELL),Math.round((WPS[i][1]-20)/CELL)],b=[Math.round((WPS[i+1][0]-20)/CELL),Math.round((WPS[i+1][1]-20)/CELL)];
+let x=a[0],y=a[1];pathCells.add(x+','+y);const dx=Math.sign(b[0]-x),dy=Math.sign(b[1]-y);
+while(x!==b[0]||y!==b[1]){x+=dx;y+=dy;pathCells.add(x+','+y);}}})();
+const SEGS=[];let PLEN=0;
+for(let i=0;i<WPS.length-1;i++){const[x1,y1]=WPS[i],[x2,y2]=WPS[i+1];const l=Math.hypot(x2-x1,y2-y1);SEGS.push({x1,y1,x2,y2,l,d0:PLEN,a:Math.atan2(y2-y1,x2-x1)});PLEN+=l;}
+function sample(d){d=Math.max(0,Math.min(d,PLEN));for(const s of SEGS){if(d<=s.d0+s.l){const t=(d-s.d0)/s.l;return{x:s.x1+(s.x2-s.x1)*t,y:s.y1+(s.y2-s.y1)*t,a:s.a};}}const s=SEGS[SEGS.length-1];return{x:s.x2,y:s.y2,a:s.a};}
+const stars=[];for(let i=0;i<70;i++)stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.4+.4,p:Math.random()*6.28});
+const FD='۰۱۲۳۴۵۶۷۸۹';
+const fd=n=>String(n).replace(/\d/g,d=>FD[d]);
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
+function toast(t){const el=document.getElementById('toast');el.textContent=t;el.style.display='block';clearTimeout(el._t);el._t=setTimeout(()=>el.style.display='none',1800);}
+function missChance(){return Math.max(.05,.2-.03*(baseUp.aim||0));}
+function coinMult(){return 1+.1*(baseUp.vault||0);}
+function costOf(st){return Math.round(st.cost*(1-.05*(baseUp.factory||0)));}
+function rangeOf(type){return TW[type].rng*(1+.06*(baseUp.cmd||0));}
+function boltDmg(){return (BOLT.dmg+wave*6)*(1+.3*(baseUp.storm||0));}
+function boltCdMax(){return BOLT.cd*Math.pow(.85,(baseUp.storm||0));}
+let AC=null;
+function beep(f,d,type,v){if(muted)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),gn=AC.createGain();o.type=div class="m-sub">از قلعه دفاع کن — با ۱۱ برج، ۸ دشمن و آپگرید دژ</div>
   <button class="mbtn" id="mEasy">آسان<small id="recEasy"></small></button>
   <button class="mbtn" id="mNormal">معمولی<small id="recNormal"></small></button>
   <button class="mbtn" id="mHard">سخت<small id="recHard"></small></button>
